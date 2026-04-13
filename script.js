@@ -1,3 +1,18 @@
+function get_data() {
+  return fetch("data.json").then(res => {
+    return res.json().then(data => {
+      return data;
+    }).catch(error => {
+      console.error(error);
+    });
+  });
+};
+
+let standings = {};
+get_data().then(data => {
+  standings = data["standings"];
+});
+
 const container = document.getElementById("container");
 
 const today = new Date();

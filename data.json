@@ -1,0 +1,131 @@
+{
+	"season": "2025-26",
+	"standings": {
+		"east": [
+			{
+				"name": "Pistons",
+				"abbr": "DET",
+				"record": "60-22",
+				"seed": 1,
+				"logo": ""
+			},{
+				"name": "Celtics",
+				"abbr": "BOS",
+				"record": "56-26",
+				"seed": 2,
+				"logo": ""
+			},{
+				"name": "Knicks",
+				"abbr": "NYK",
+				"record": "53-29",
+				"seed": 3,
+				"logo": ""
+			},{
+				"name": "Cavaliers",
+				"abbr": "CLE",
+				"record": "52-30",
+				"seed": 4,
+				"logo": ""
+			},{
+				"name": "Raptors",
+				"abbr": "TOR",
+				"record": "46-36",
+				"seed": 5,
+				"logo": ""
+			},{
+				"name": "Hawks",
+				"abbr": "ATL",
+				"record": "46-36",
+				"seed": 6,
+				"logo": ""
+			},{
+				"name": "76ers",
+				"abbr": "PHI",
+				"record": "45-37",
+				"seed": 7,
+				"logo": ""
+			},{
+				"name": "Magic",
+				"abbr": "ORL",
+				"record": "45-37",
+				"seed": 8,
+				"logo": ""
+			},{
+				"name": "Hornets",
+				"abbr": "CHA",
+				"record": "44-38",
+				"seed": 9,
+				"logo": ""
+			},{
+				"name": "Heat",
+				"abbr": "MIA",
+				"record": "43-39",
+				"seed": 10,
+				"logo": ""
+			}
+		],
+		"west": [
+			{
+				"name": "Thunder",
+				"abbr": "OKC",
+				"record": "",
+				"seed": 1,
+				"logo": ""
+			},{
+				"name": "Spurs",
+				"abbr": "SAS",
+				"record": "",
+				"seed": 2,
+				"logo": ""
+			},{
+				"name": "Nuggets",
+				"abbr": "DEN",
+				"record": "",
+				"seed": 3,
+				"logo": ""
+			},{
+				"name": "Lakers",
+				"abbr": "LAL",
+				"record": "",
+				"seed": 4,
+				"logo": ""
+			},{
+				"name": "Rockets",
+				"abbr": "HOU",
+				"record": "",
+				"seed": 5,
+				"logo": ""
+			},{
+				"name": "Timberwolves",
+				"abbr": "MIN",
+				"record": "",
+				"seed": 6,
+				"logo": ""
+			},{
+				"name": "Suns",
+				"abbr": "PHX",
+				"record": "",
+				"seed": 7,
+				"logo": ""
+			},{
+				"name": "Trailblazers",
+				"abbr": "POR",
+				"record": "",
+				"seed": 8,
+				"logo": ""
+			},{
+				"name": "Clippers",
+				"abbr": "LAC",
+				"record": "",
+				"seed": 9,
+				"logo": ""
+			},{
+				"name": "Warriors",
+				"abbr": "GSW",
+				"record": "",
+				"seed": 10,
+				"logo": ""
+			}
+		]
+	}
+}
