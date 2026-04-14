@@ -112,7 +112,7 @@ html, body {
   padding: 8px;
 }
 
-#bracket-result{
+#bracket-result {
   border-style: solid;
   border-width: 1px;
   width: 100%;
@@ -120,5 +120,17 @@ html, body {
   text-align: left;
   padding: 4px;
   margin: 4px;
+  background-color: lightgray;
+}
+
+#bracket-input {
+  width: 100%;
+  height: 400px;
+  font-family: 'Courier New', Courier, monospace;
+  margin: 4px;
+  padding: 4px;
+  resize: none;
+  border-style: solid;
+  border-width: 1px;
   background-color: lightgray;
 }
