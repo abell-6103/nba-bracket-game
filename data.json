@@ -7,7 +7,7 @@
 				"abbr": "DET",
 				"record": "60-22",
 				"seed": 1,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612765/2021/09/dp-primary.svg"
 			},{
 				"name": "Celtics",
 				"abbr": "BOS",
@@ -19,112 +19,112 @@
 				"abbr": "NYK",
 				"record": "53-29",
 				"seed": 3,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612752/2022/10/NYK2223-PRIMARY-LOGO.svg"
 			},{
 				"name": "Cavaliers",
 				"abbr": "CLE",
 				"record": "52-30",
 				"seed": 4,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612739/2022/03/Asset-4-3.svg"
 			},{
 				"name": "Raptors",
 				"abbr": "TOR",
 				"record": "46-36",
 				"seed": 5,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612761/2021/09/Toronto-Raptors.svg"
 			},{
 				"name": "Hawks",
 				"abbr": "ATL",
 				"record": "46-36",
 				"seed": 6,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612737/2023/01/atl_hawks_primary_icon.svg"
 			},{
 				"name": "76ers",
 				"abbr": "PHI",
 				"record": "45-37",
 				"seed": 7,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612755/2022/06/76CoS-PrimaryIconRev-471x471-1.svg"
 			},{
 				"name": "Magic",
 				"abbr": "ORL",
 				"record": "45-37",
 				"seed": 8,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612753/2025/06/Orlando-Magic-Global-Logo.svg"
 			},{
 				"name": "Hornets",
 				"abbr": "CHA",
 				"record": "44-38",
 				"seed": 9,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612766/2022/04/hornets_logo2.svg"
 			},{
 				"name": "Heat",
 				"abbr": "MIA",
 				"record": "43-39",
 				"seed": 10,
-				"logo": ""
+				"logo": "https://cdn.nba.com/logos/nba/1610612748/primary/D/logo.svg"
 			}
 		],
 		"west": [
 			{
 				"name": "Thunder",
 				"abbr": "OKC",
-				"record": "",
+				"record": "64-18",
 				"seed": 1,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612760/2021/12/logo.svg"
 			},{
 				"name": "Spurs",
 				"abbr": "SAS",
-				"record": "",
+				"record": "62-20",
 				"seed": 2,
-				"logo": ""
+				"logo": "https://cdn.nba.com/logos/nba/1610612759/primary/D/logo.svg"
 			},{
 				"name": "Nuggets",
 				"abbr": "DEN",
-				"record": "",
+				"record": "54-28",
 				"seed": 3,
-				"logo": ""
+				"logo": "https://cdn.nba.com/logos/nba/1610612743/primary/D/logo.svg"
 			},{
 				"name": "Lakers",
 				"abbr": "LAL",
-				"record": "",
+				"record": "53-29",
 				"seed": 4,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612747/2021/12/lakers_70x70.svg"
 			},{
 				"name": "Rockets",
 				"abbr": "HOU",
-				"record": "",
+				"record": "52-30",
 				"seed": 5,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612745/2023/10/logo-6.46.56-PM.svg"
 			},{
 				"name": "Timberwolves",
 				"abbr": "MIN",
-				"record": "",
+				"record": "49-33",
 				"seed": 6,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612750/2021/11/logo-1.svg"
 			},{
 				"name": "Suns",
 				"abbr": "PHX",
-				"record": "",
+				"record": "45-37",
 				"seed": 7,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612756/2022/08/suns-logo.svg"
 			},{
-				"name": "Trailblazers",
+				"name": "Trail Blazers",
 				"abbr": "POR",
-				"record": "",
+				"record": "42-40",
 				"seed": 8,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612757/2022/03/tb_primary_rgb.svg"
 			},{
 				"name": "Clippers",
 				"abbr": "LAC",
-				"record": "",
+				"record": "42-40",
 				"seed": 9,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612746/2024/06/LAClippers_Global_rgb.svg"
 			},{
 				"name": "Warriors",
 				"abbr": "GSW",
-				"record": "",
+				"record": "37-45",
 				"seed": 10,
-				"logo": ""
+				"logo": "https://cdn.nba.com/teams/uploads/sites/1610612744/2022/06/gsw-logo-1920.svg"
 			}
 		]
 	}

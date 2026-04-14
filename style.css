@@ -51,3 +51,62 @@ html, body {
 .subtitle {
   font-style: italic;
 }
+
+#matchup-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px;
+}
+
+#teams-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.team-box {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 10px;
+  width: 150px;
+  height: 180px;
+  box-sizing: border-box;
+  padding: 10px;
+  color: gray;
+  background-color: lightgray;
+  gap: 4px;
+}
+
+.team-box.selected {
+  background-color: darkseagreen;
+  color: green;
+  font-weight: bold;
+  border-width: 5px;
+}
+
+.team-name {
+  font-size: large;
+}
+
+.team-record {
+  font-size: small;
+}
+
+.team-logo {
+  width: 100px;
+  height: 100px;
+}
+
+#games-input {
+  border-radius: 10px;
+  background-color: lightgray;
+  padding: 8px;
+}

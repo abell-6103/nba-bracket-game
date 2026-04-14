@@ -14,12 +14,34 @@
         Pick the winner of every postseason matchup and how many games they win by to earn points. Come back at the end of the postseason to see how well you did!
       </div>
       <div class="button-display">
-        <button id="create-button" hidden>Create Bracket</button>
+        <button id="create-button">Create Bracket</button>
         <button id="score-button" hidden>Check Score</button>
       </div>
     </div>
     <div class="screen" id="predict-screen">
-      Predict
+      <div class="title">West Play-In Match 1</div>
+      <div class="subtitle">Who you got??</div>
+      <div id="matchup-container">
+        <div id="teams-container">
+          <div class="team-box" id="team-1">
+            <div class="team-name">Pistons</div>
+            <img class="team-logo" src="https://cdn.nba.com/teams/uploads/sites/1610612765/2021/09/dp-primary.svg">
+            <div class="team-record">60-22</div>
+          </div>
+          <div class="team-box" id="team-2">
+            <div class="team-name">Pacers</div>
+            <img class="team-logo" src="https://cdn.nba.com/teams/uploads/sites/1610612754/2025/10/logo-pacers.svg">
+            <div class="team-record">19-63</div>
+          </div>
+        </div>
+        <div id="games-input">
+          <input type="range" min="4" max="7" value="4" class="slider" id="games-slider">
+          <div id="games-text">4 Games</div>
+        </div>
+      </div>
+      <div class="button-display">
+        <button id="matchup-button">Confirm Prediction</button>
+      </div>
     </div>
     <div class="screen" id="confirm-screen">
       Confirm
