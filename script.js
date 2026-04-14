@@ -62,10 +62,31 @@ async function get_team_by_seed(conference_name, seed) {
   return undefined;
 };
 
+// --- MATCHUP OUTCOMES -------------------------
+
+let matchup_winners = {};
+let matchup_games = {};
+
+function get_matchup_winner(matchup_id) {
+  return matchup_winners[matchup_id];
+}
+
+function get_matchup_games(matchup_id) {
+  return matchup_games[matchup_id];
+}
+
+function set_matchup_winner(matchup_id, team, games) {
+  matchup_winners[matchup_id] = team;
+  matchup_games[matchup_id] = games;
+}
+
 // --- PREDICT SCREEN ---------------------------
+
+let matchup_id = "";
 
 let team_1 = null;
 let team_2 = null;
+let games = -1;
 
 let selection_made = false;
 let selection = null;
@@ -124,6 +145,39 @@ function display_matchup(title, team_1_obj, team_2_obj, play_in) {
 
 games_slider.oninput = function() {
   games_text.innerHTML = String(this.value) + " Games";
+  games = this.value;
+};
+
+matchup_button.onclick = function() {
+  set_matchup_winner(matchup_id, selection, games);
+};
+
+// --- FINAL SCREEN -----------------------------
+
+const bracket_display = document.getElementById("bracket-result");
+let copypaste = "";
+
+function display_bracket() {
+  bracket_display.innerHTML = "";
+  copypaste = "";
+  for (key in matchup_winners) {
+    const winner = get_matchup_winner(key).abbr;
+    const games = get_matchup_games(key);
+    if (games != -1) {
+      bracket_display.innerHTML += `${matchup_id}: ${winner}<br>`;
+      copypaste += `${matchup_id}: ${winner}\n`;
+    } else {
+      bracket_display.innerHTML += `${matchup_id}: ${winner} in ${games}<br>`;
+      copypaste += `${matchup_id}: ${winner} in ${games}\n`;
+    }
+  }
+}
+
+document.getElementById("copy-button").onclick = function() {
+  navigator.clipboard.writeText(copypaste);
+};
+document.getElementById("return-button").onclick = function() {
+  set_screen(LAUNCH_SCREEN_NAME);
 };
 
 // --- LAUNCH SCREEN ----------------------------
@@ -137,5 +191,3 @@ create_button.onclick = launch;
 // --- INITIALIZE SITE --------------------------
 
 set_screen(LAUNCH_SCREEN_NAME);
-
-//set_screen(PREDICT_SCREEN_NAME);

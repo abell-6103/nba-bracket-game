@@ -36,6 +36,7 @@ html, body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .screen.active {
@@ -109,4 +110,14 @@ html, body {
   border-radius: 10px;
   background-color: lightgray;
   padding: 8px;
+}
+
+#bracket-result{
+  border-style: solid;
+  border-width: 1px;
+  width: 100%;
+  font-family: 'Courier New', Courier, monospace;
+  text-align: left;
+  padding: 4px;
+  margin: 4px;
 }
