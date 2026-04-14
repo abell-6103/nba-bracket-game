@@ -80,6 +80,66 @@ function set_matchup_winner(matchup_id, team, games) {
   matchup_games[matchup_id] = games;
 }
 
+// --- QUEUE FOR PREDICTIONS --------------------
+
+let queue = [];
+
+function enqueue_matchup(id, team_1_obj, team_2_obj, play_in) {
+  let matchup = {};
+  matchup['id'] = id;
+  matchup['team_1'] = team_1_obj;
+  matchup['team_2'] = team_2_obj;
+  matchup['play_in'] = play_in;
+  queue.push(matchup);
+}
+
+function pop_matchup() {
+  return queue.shift();
+}
+
+async function queue_play_in(conference_name) {
+  const seed_7 = await get_team_by_seed(conference_name, 7);
+  const seed_8 = await get_team_by_seed(conference_name, 8);
+  const seed_9 = await get_team_by_seed(conference_name, 9);
+  const seed_10 = await get_team_by_seed(conference_name, 10);
+
+  if (conference_name === "east") {
+    enqueue_matchup("East Play-In Match 1", seed_7, seed_8, true);
+    enqueue_matchup("East Play-In Match 2", seed_9, seed_10, true);
+  } else if (conference_name === "west") {
+    enqueue_matchup("West Play-In Match 1", seed_7, seed_8, true);
+    enqueue_matchup("West Play-In Match 2", seed_9, seed_10, true);
+  }
+}
+
+// --- FINAL SCREEN -----------------------------
+
+const bracket_display = document.getElementById("bracket-result");
+let copypaste = "";
+
+function display_bracket() {
+  bracket_display.innerHTML = "";
+  copypaste = "";
+  for (key in matchup_winners) {
+    const winner = get_matchup_winner(key).abbr;
+    const games = get_matchup_games(key);
+    if (games == -1) {
+      bracket_display.innerHTML += `${key}: ${winner}<br>`;
+      copypaste += `${key}: ${winner}\n`;
+    } else {
+      bracket_display.innerHTML += `${key}: ${winner} in ${games}<br>`;
+      copypaste += `${key}: ${winner} in ${games}\n`;
+    }
+  }
+}
+
+document.getElementById("copy-button").onclick = function() {
+  navigator.clipboard.writeText(copypaste);
+};
+document.getElementById("return-button").onclick = function() {
+  set_screen(LAUNCH_SCREEN_NAME);
+};
+
 // --- PREDICT SCREEN ---------------------------
 
 let matchup_id = "";
@@ -124,6 +184,7 @@ team_2_box.addEventListener("click", () => {
 
 function display_matchup(title, team_1_obj, team_2_obj, play_in) {
   match_title.innerHTML = title;
+  matchup_id = title;
 
   clear_team_selection();
   games_input.hidden = true;
@@ -150,39 +211,29 @@ games_slider.oninput = function() {
 
 matchup_button.onclick = function() {
   set_matchup_winner(matchup_id, selection, games);
-};
-
-// --- FINAL SCREEN -----------------------------
-
-const bracket_display = document.getElementById("bracket-result");
-let copypaste = "";
-
-function display_bracket() {
-  bracket_display.innerHTML = "";
-  copypaste = "";
-  for (key in matchup_winners) {
-    const winner = get_matchup_winner(key).abbr;
-    const games = get_matchup_games(key);
-    if (games != -1) {
-      bracket_display.innerHTML += `${matchup_id}: ${winner}<br>`;
-      copypaste += `${matchup_id}: ${winner}\n`;
-    } else {
-      bracket_display.innerHTML += `${matchup_id}: ${winner} in ${games}<br>`;
-      copypaste += `${matchup_id}: ${winner} in ${games}\n`;
-    }
+  if (queue.length > 0) {
+    const new_matchup = pop_matchup();
+    display_matchup(new_matchup['id'], new_matchup['team_1'], new_matchup['team_2'], new_matchup['play_in']);
+  } else {
+    display_bracket();
+    set_screen(FINAL_SCREEN_NAME);
   }
-}
-
-document.getElementById("copy-button").onclick = function() {
-  navigator.clipboard.writeText(copypaste);
-};
-document.getElementById("return-button").onclick = function() {
-  set_screen(LAUNCH_SCREEN_NAME);
 };
 
 // --- LAUNCH SCREEN ----------------------------
 
 async function launch() {
+  for (const id in matchup_winners) {
+    delete matchup_winners[id];
+    delete matchup_games[id];
+  }
+
+  await queue_play_in("west");
+  await queue_play_in("east");
+
+  const first_match = pop_matchup();
+  display_matchup(first_match['id'], first_match['team_1'], first_match['team_2'], first_match['play_in']);
+
   set_screen(PREDICT_SCREEN_NAME);
 }
 
