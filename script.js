@@ -2,8 +2,10 @@ const LAUNCH_SCREEN_NAME = "launch-screen";
 const PREDICT_SCREEN_NAME = "predict-screen";
 const CONFIRM_SCREEN_NAME = "confirm-screen";
 const FINAL_SCREEN_NAME = "final-screen";
+const REVIEW_INPUT_SCREEN_NAME = "review-input-screen";
 
 const create_button = document.getElementById("create-button");
+const review_button = document.getElementById("review-button");
 const matchup_button = document.getElementById("matchup-button");
 
 const match_title = document.getElementById("predict-screen").querySelector(".title");
@@ -372,6 +374,10 @@ async function launch() {
 }
 
 create_button.onclick = launch;
+review_button.onclick = function() {
+  console.log("hello");
+  set_screen(REVIEW_INPUT_SCREEN_NAME);
+};
 
 // --- INITIALIZE SITE --------------------------
 
