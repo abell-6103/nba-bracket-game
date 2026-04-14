@@ -270,6 +270,47 @@ async function queue_round_1(conference_name) {
   enqueue_matchup(`${name_starter} Match 4`, seed_4, seed_5, false);
 }
 
+function queue_round_2(conference_name) {
+  let name_starter = "";
+  if (conference_name == "east") {
+    name_starter = "East";
+  } else if (conference_name == "west") {
+    name_starter = "West";
+  } else {
+    return;
+  }
+
+  const team_1 = get_matchup_winner(`${name_starter} Round 1 Match 1`);
+  const team_2 = get_matchup_winner(`${name_starter} Round 1 Match 2`);
+  const team_3 = get_matchup_winner(`${name_starter} Round 1 Match 3`);
+  const team_4 = get_matchup_winner(`${name_starter} Round 1 Match 4`);
+
+  enqueue_matchup(`${name_starter} Round 2 Match 1`, team_1, team_4, false);
+  enqueue_matchup(`${name_starter} Round 2 Match 2`, team_2, team_3, false);
+}
+
+function queue_round_3(conference_name) {
+  let name_starter = "";
+  if (conference_name == "east") {
+    name_starter = "East";
+  } else if (conference_name == "west") {
+    name_starter = "West";
+  } else {
+    return;
+  }
+
+  const team_1 = get_matchup_winner(`${name_starter} Round 2 Match 1`);
+  const team_2 = get_matchup_winner(`${name_starter} Round 2 Match 2`);
+
+  enqueue_matchup(`${name_starter} Conference Finals`, team_1, team_2, false);
+}
+
+function queue_finals() {
+  const west_team = get_matchup_winner("West Conference Finals");
+  const east_team = get_matchup_winner("East Conference Finals");
+  enqueue_matchup('Finals', west_team, east_team, false);
+}
+
 function display_next_matchup() {
   const new_matchup = pop_matchup();
   display_matchup(new_matchup['id'], new_matchup['team_1'], new_matchup['team_2'], new_matchup['play_in']);
@@ -292,11 +333,24 @@ matchup_button.onclick = async function() {
       await queue_round_1("east");
       finished_r1 = true;
       display_next_matchup();
+    } else if (!finished_r2) {
+      queue_round_2("west");
+      queue_round_2("east");
+      finished_r2 = true;
+      display_next_matchup();
+    } else if (!finished_r3) {
+      queue_round_3("west");
+      queue_round_3("east");
+      finished_r3 = true;
+      display_next_matchup();
+    } else if (!finished_f) {
+      queue_finals();
+      finished_f = true;
+      display_next_matchup();
     } else {
       display_bracket();
       set_screen(FINAL_SCREEN_NAME);
     }
-
   }
 };
 
