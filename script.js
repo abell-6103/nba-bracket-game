@@ -209,14 +209,94 @@ games_slider.oninput = function() {
   games = this.value;
 };
 
-matchup_button.onclick = function() {
+let finished_play_in = false;
+let finished_r1 = false;
+let finished_r2 = false;
+let finished_r3 = false;
+let finished_f = false;
+
+async function queue_next_play_in(conference_name) {
+  let winner = null;
+  let other_winner = null;
+  let new_id = null;
+  if (conference_name == "east") {
+    new_id = "East Play-In Match 3";
+  } else if (conference_name == "west") {
+    new_id = "West Play-In Match 3";
+  }
+
+  if (conference_name == "east") {
+    winner = get_matchup_winner("East Play-In Match 1");
+    other_winner = get_matchup_winner("East Play-In Match 2");
+  } else if (conference_name == "west") {
+    winner = get_matchup_winner("West Play-In Match 1");
+    other_winner = get_matchup_winner("West Play-In Match 2");
+  }
+  const seed_7 = await get_team_by_seed(conference_name, 7);
+  const seed_8 = await get_team_by_seed(conference_name, 8);
+  if (winner.abbr == seed_7.abbr) {
+    enqueue_matchup(new_id, seed_8, other_winner, true);
+  } else {
+    enqueue_matchup(new_id, seed_7, other_winner, true);
+  }
+}
+
+async function queue_round_1(conference_name) {
+  const seed_1 = await get_team_by_seed(conference_name, 1);
+  const seed_2 = await get_team_by_seed(conference_name, 2);
+  const seed_3 = await get_team_by_seed(conference_name, 3);
+  const seed_4 = await get_team_by_seed(conference_name, 4);
+  const seed_5 = await get_team_by_seed(conference_name, 5);
+  const seed_6 = await get_team_by_seed(conference_name, 6);
+
+  let name_starter = null;
+  let seed_7 = null;
+  let seed_8 = null;
+  if (conference_name == "east") {
+    name_starter = "East Round 1";
+    seed_7 = get_matchup_winner("East Play-In Match 1");
+    seed_8 = get_matchup_winner("East Play-In Match 3");
+  } else if (conference_name == "west") {
+    name_starter = "West Round 1";
+    seed_7 = get_matchup_winner("West Play-In Match 1");
+    seed_8 = get_matchup_winner("West Play-In Match 3");
+  } else {
+    return;
+  }
+
+  enqueue_matchup(`${name_starter} Match 1`, seed_1, seed_8, false);
+  enqueue_matchup(`${name_starter} Match 2`, seed_2, seed_7, false);
+  enqueue_matchup(`${name_starter} Match 3`, seed_3, seed_6, false);
+  enqueue_matchup(`${name_starter} Match 4`, seed_4, seed_5, false);
+}
+
+function display_next_matchup() {
+  const new_matchup = pop_matchup();
+  display_matchup(new_matchup['id'], new_matchup['team_1'], new_matchup['team_2'], new_matchup['play_in']);
+}
+
+matchup_button.onclick = async function() {
   set_matchup_winner(matchup_id, selection, games);
   if (queue.length > 0) {
-    const new_matchup = pop_matchup();
-    display_matchup(new_matchup['id'], new_matchup['team_1'], new_matchup['team_2'], new_matchup['play_in']);
+    display_next_matchup();
   } else {
-    display_bracket();
-    set_screen(FINAL_SCREEN_NAME);
+    if (!finished_play_in) {
+      await queue_next_play_in("west");
+      await queue_next_play_in("east");
+      finished_play_in = true;
+      display_next_matchup();
+    } else if (!finished_r1) {
+      games = games_slider.value;
+      games_text.innerHTML = String(games) + " Games";
+      await queue_round_1("west");
+      await queue_round_1("east");
+      finished_r1 = true;
+      display_next_matchup();
+    } else {
+      display_bracket();
+      set_screen(FINAL_SCREEN_NAME);
+    }
+
   }
 };
 
