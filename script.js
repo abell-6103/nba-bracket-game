@@ -356,6 +356,16 @@ matchup_button.onclick = async function() {
   }
 };
 
+// --- REVIEW SCREEN ----------------------------
+
+const bracket_input = document.getElementById("bracket-input");
+const bracket_input_return_button = document.getElementById("review-input-return-button");
+const bracket_input_button = document.getElementById("review-confirm-button");
+
+bracket_input_return_button.onclick = function() {
+  set_screen(LAUNCH_SCREEN_NAME);
+}
+
 // --- LAUNCH SCREEN ----------------------------
 
 async function launch() {
