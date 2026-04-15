@@ -362,8 +362,58 @@ const bracket_input = document.getElementById("bracket-input");
 const bracket_input_return_button = document.getElementById("review-input-return-button");
 const bracket_input_button = document.getElementById("review-confirm-button");
 
+let bracket_winners = {};
+let bracket_games = {};
+
+function is_number(str) {
+  return str.trim() !== "" && !isNaN(str);
+}
+
+function parse_line(line) {
+  const elements = line.split(": ");
+  if (elements.length != 2) {
+    return;
+  }
+
+  const subelements = elements[1].split(" ");
+  if (subelements.length != 1 && subelements.length != 3) {
+    return;
+  }
+  if (subelements.length == 3 && subelements[1] != "in") {
+    return;
+  }
+
+  if (subelements.length == 3 && !is_number(subelements[2])) {
+    return;
+  }
+
+  const key = elements[0];
+  const winner = subelements[0];
+  let games = -1;
+  if (subelements.length == 3) {
+    games = Number(subelements[2]);
+  }
+
+  bracket_winners[key] = winner;
+  bracket_games[key] = games;
+}
+
+function parse_bracket(bracket_text) {
+  bracket_winners.length = 0;
+  bracket_games.length = 0;
+
+  const lines = bracket_text.split(/\r?\n/);
+  for (const line of lines) {
+    parse_line(line);
+  }
+}
+
 bracket_input_return_button.onclick = function() {
   set_screen(LAUNCH_SCREEN_NAME);
+}
+
+bracket_input_button.onclick = function() {
+  parse_bracket(bracket_input.value);
 }
 
 // --- LAUNCH SCREEN ----------------------------
