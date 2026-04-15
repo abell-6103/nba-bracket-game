@@ -1,5 +1,15 @@
 {
 	"season": "2025-26",
+	"outcomes": {
+		"West Play-In Match 1": {
+			"winner": "POR",
+			"games": -1
+		},
+		"East Play-In Match 2": {
+			"winner": "CHA",
+			"games": -1
+		}
+	},
 	"standings": {
 		"east": [
 			{
