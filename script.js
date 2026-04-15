@@ -3,6 +3,7 @@ const PREDICT_SCREEN_NAME = "predict-screen";
 const CONFIRM_SCREEN_NAME = "confirm-screen";
 const FINAL_SCREEN_NAME = "final-screen";
 const REVIEW_INPUT_SCREEN_NAME = "review-input-screen";
+const REVIEW_SCREEN_NAME = "review-screen";
 
 const create_button = document.getElementById("create-button");
 const review_button = document.getElementById("review-button");
@@ -414,6 +415,18 @@ bracket_input_return_button.onclick = function() {
 
 bracket_input_button.onclick = function() {
   parse_bracket(bracket_input.value);
+  set_screen(REVIEW_SCREEN_NAME);
+}
+
+const review_home_button = document.getElementById("review-home-button");
+const review_redo_button = document.getElementById("review-redo-button");
+
+review_home_button.onclick = function() {
+  set_screen(LAUNCH_SCREEN_NAME);
+}
+
+review_redo_button.onclick = function() {
+  set_screen(REVIEW_INPUT_SCREEN_NAME);
 }
 
 // --- LAUNCH SCREEN ----------------------------
