@@ -134,3 +134,42 @@ html, body {
   border-width: 1px;
   background-color: lightgray;
 }
+
+#bracket-review-display {
+  margin: 20px;
+  background-color: lightgray;
+  padding: 20px;
+  width: 100%;
+  border-radius: 20px;
+}
+
+#bracket-score {
+  font-weight: bold;
+  font-size: larger;
+  margin-bottom: 10px;
+}
+
+#bracket-list {
+  font-family: monospace;
+  font-size: medium;
+  width: 75%;
+  margin: auto;
+}
+
+.list-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-title {
+  display: flex;
+  text-align: left;
+}
+
+.list-value {
+  display: flex;
+  text-align: right;
+  font-weight: bold;
+}
