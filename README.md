@@ -10,4 +10,4 @@ To play the game, the player must create a bracket. They do this by going matchu
 ## Planned Features
 
 - [x] Bracket Creator
-- [ ] Bracket Evaluator
+- [x] Bracket Evaluator

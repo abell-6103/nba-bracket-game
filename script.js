@@ -405,9 +405,13 @@ function parse_line(line) {
   bracket_games[key] = games;
 }
 
+function clear_bracket() {
+  for (const id in bracket_winners) delete bracket_winners[id];
+  for (const id in bracket_games) delete bracket_games[id];
+}
+
 function parse_bracket(bracket_text) {
-  bracket_winners.length = 0;
-  bracket_games.length = 0;
+  clear_bracket();
 
   const lines = bracket_text.split(/\r?\n/);
   for (const line of lines) {
@@ -418,7 +422,11 @@ function parse_bracket(bracket_text) {
 const score_display = document.getElementById("bracket-score");
 
 function set_score(score) {
-  score_display.innerHTML = `Score: ${score} Points`;
+  if (score == 1) {
+    score_display.innerHTML = `Score: ${score} Point`;
+  } else {
+    score_display.innerHTML = `Score: ${score} Points`;
+  }
 }
 
 const bracket_list = document.getElementById("bracket-list");
@@ -508,6 +516,7 @@ review_home_button.onclick = function() {
 }
 
 review_redo_button.onclick = function() {
+  clear_bracket();
   set_screen(REVIEW_INPUT_SCREEN_NAME);
 }
 
