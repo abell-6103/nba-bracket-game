@@ -409,12 +409,48 @@ function parse_bracket(bracket_text) {
   }
 }
 
+const score_display = document.getElementById("bracket-score");
+
+function set_score(score) {
+  score_display.innerHTML = `Score: ${score} Points`;
+}
+
+const bracket_list = document.getElementById("bracket-list");
+
+function add_bracket_item(title, value) {
+  const item_div = document.createElement("div");
+  item_div.classList.add("list-item");
+
+  const title_div = document.createElement("div");
+  title_div.classList.add("list-title");
+  title_div.innerHTML = title;
+  
+  const value_div = document.createElement("div");
+  value_div.classList.add("list-value");
+  value_div.innerHTML = value;
+
+  item_div.appendChild(title_div);
+  item_div.appendChild(value_div);
+}
+
+function clear_bracket_items() {
+  bracket_list.innerHTML = "";
+}
+
+function display_review() {
+  let score = 0;
+  clear_bracket_items();
+
+  set_score(score);
+}
+
 bracket_input_return_button.onclick = function() {
   set_screen(LAUNCH_SCREEN_NAME);
 }
 
 bracket_input_button.onclick = function() {
   parse_bracket(bracket_input.value);
+  display_review();
   set_screen(REVIEW_SCREEN_NAME);
 }
 
