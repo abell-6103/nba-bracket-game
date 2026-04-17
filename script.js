@@ -33,6 +33,12 @@ function get_data() {
   });
 };
 
+let outcomes_promise = get_data().then(data => data.outcomes);
+
+async function get_outcomes() {
+  return await outcomes_promise;
+}
+
 let standings_promise = get_data().then(data => data.standings);
 
 async function get_standings() {
@@ -431,15 +437,55 @@ function add_bracket_item(title, value) {
 
   item_div.appendChild(title_div);
   item_div.appendChild(value_div);
+
+  bracket_list.appendChild(item_div);
 }
 
 function clear_bracket_items() {
   bracket_list.innerHTML = "";
 }
 
-function display_review() {
+async function display_review() {
   let score = 0;
   clear_bracket_items();
+
+  const outcomes = await get_outcomes();
+  for (const id of Object.keys(outcomes)) {
+    const winner = outcomes[id].winner;
+    const games = outcomes[id].games;
+
+    let base_string = `${id}: ${winner}`
+    if (games != -1) {
+      base_string += ` in ${games}`
+    }
+
+    if (bracket_winners[id]) {
+      let pick_string = `Your pick: ${bracket_winners[id]}`;
+      if (games != -1) {
+        pick_string += ` in ${bracket_games[id]}`
+      }
+
+      if (winner == bracket_winners[id]) {
+        if (games != -1) {
+          if (games == bracket_games[id]) {
+            add_bracket_item(`✅✅ ${base_string} (${pick_string})`, "+2");
+            score += 2;
+          } else {
+            add_bracket_item(` ✅ ${base_string} (${pick_string})`, "+1");
+            score += 1;
+          }
+        } else {
+          add_bracket_item(` ✅ ${base_string} (${pick_string})`, "+1");
+          score += 1;
+        }
+      } else {
+        add_bracket_item(` ❌ ${base_string} (${pick_string})`, "-");
+      }
+    } else {
+      // No prediction made
+      add_bracket_item(` ❌ ${base_string} (No pick made)`, "-");
+    }
+  }
 
   set_score(score);
 }
@@ -448,9 +494,9 @@ bracket_input_return_button.onclick = function() {
   set_screen(LAUNCH_SCREEN_NAME);
 }
 
-bracket_input_button.onclick = function() {
+bracket_input_button.onclick = async function() {
   parse_bracket(bracket_input.value);
-  display_review();
+  await display_review();
   set_screen(REVIEW_SCREEN_NAME);
 }
 
@@ -484,7 +530,6 @@ async function launch() {
 
 create_button.onclick = launch;
 review_button.onclick = function() {
-  console.log("hello");
   set_screen(REVIEW_INPUT_SCREEN_NAME);
 };
 
