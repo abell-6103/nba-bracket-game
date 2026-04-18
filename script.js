@@ -1,3 +1,5 @@
+// --- SCREEN HANDLING --------------------------
+
 const LAUNCH_SCREEN_NAME = "launch-screen";
 const PREDICT_SCREEN_NAME = "predict-screen";
 const CONFIRM_SCREEN_NAME = "confirm-screen";
@@ -12,6 +14,8 @@ function set_screen(screen_name) {
   document.getElementById(screen_name).classList.add("active");
 }
 
+// --- DATA HANDLING ----------------------------
+
 function get_data() {
   return fetch("data.json").then(res => {
     return res.json().then(data => {
@@ -22,17 +26,17 @@ function get_data() {
   });
 };
 
-let outcomes_promise = get_data().then(data => data.outcomes);
+let standings_promise = get_data().then(data => data.standings);
+async function get_standings() {
+  return await standings_promise;
+}
 
+let outcomes_promise = get_data().then(data => data.outcomes);
 async function get_outcomes() {
   return await outcomes_promise;
 }
 
-let standings_promise = get_data().then(data => data.standings);
-
-async function get_standings() {
-  return await standings_promise;
-}
+// --- REGULAR SEASON GET METHODS ---------------
 
 async function get_team_by_abbr(abbr) {
   const standings = await get_standings();
@@ -60,7 +64,7 @@ async function get_team_by_seed(conference_name, seed) {
   return undefined;
 };
 
-// --- MATCHUP OUTCOMES -------------------------
+// --- BRACKET OUTCOMES -------------------------
 
 let matchup_winners = {};
 let matchup_games = {};
@@ -78,7 +82,7 @@ function set_matchup_winner(matchup_id, team, games) {
   matchup_games[matchup_id] = games;
 }
 
-// --- QUEUE FOR PREDICTIONS --------------------
+// --- PREDICTION QUEUE -------------------------
 
 let queue = [];
 
