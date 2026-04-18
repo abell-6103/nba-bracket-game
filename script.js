@@ -5,17 +5,6 @@ const FINAL_SCREEN_NAME = "final-screen";
 const REVIEW_INPUT_SCREEN_NAME = "review-input-screen";
 const REVIEW_SCREEN_NAME = "review-screen";
 
-const create_button = document.getElementById("create-button");
-const review_button = document.getElementById("review-button");
-const matchup_button = document.getElementById("matchup-button");
-
-const match_title = document.getElementById("predict-screen").querySelector(".title");
-const team_1_box = document.getElementById("team-1");
-const team_2_box = document.getElementById("team-2");
-const games_input = document.getElementById("games-input");
-const games_slider = document.getElementById("games-slider");
-const games_text = document.getElementById("games-text");
-
 function set_screen(screen_name) {
   document.querySelectorAll(".screen").forEach(screen => {
     screen.classList.remove("active");
@@ -162,12 +151,18 @@ let selection = null;
 
 let play_in_match = false;
 
+const team_1_box = document.getElementById("team-1");
+const team_2_box = document.getElementById("team-2");
+
 function clear_team_selection() {
   team_1_box.classList.remove("selected");
   team_2_box.classList.remove("selected");
   selection_made = false;
   selection = null;
 }
+
+const matchup_button = document.getElementById("matchup-button");
+const games_input = document.getElementById("games-input");
 
 team_1_box.addEventListener("click", () => {
   clear_team_selection();
@@ -191,6 +186,8 @@ team_2_box.addEventListener("click", () => {
   matchup_button.hidden = false;
 });
 
+const match_title = document.getElementById("predict-screen").querySelector(".title");
+
 function display_matchup(title, team_1_obj, team_2_obj, play_in) {
   match_title.innerHTML = title;
   matchup_id = title;
@@ -212,6 +209,9 @@ function display_matchup(title, team_1_obj, team_2_obj, play_in) {
   team_2_box.querySelector(".team-logo").src = team_2_obj.logo;
   team_2_box.querySelector(".team-record").innerHTML = team_2_obj.record;
 }
+
+const games_slider = document.getElementById("games-slider");
+const games_text = document.getElementById("games-text");
 
 games_slider.oninput = function() {
   games_text.innerHTML = String(this.value) + " Games";
@@ -536,6 +536,9 @@ async function launch() {
 
   set_screen(PREDICT_SCREEN_NAME);
 }
+
+const create_button = document.getElementById("create-button");
+const review_button = document.getElementById("review-button");
 
 create_button.onclick = launch;
 review_button.onclick = function() {
