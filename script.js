@@ -114,6 +114,102 @@ async function queue_play_in(conference_name) {
   }
 }
 
+async function queue_next_play_in(conference_name) {
+  let winner = null;
+  let other_winner = null;
+  let new_id = null;
+  if (conference_name == "east") {
+    new_id = "East Play-In Match 3";
+  } else if (conference_name == "west") {
+    new_id = "West Play-In Match 3";
+  }
+
+  if (conference_name == "east") {
+    winner = get_matchup_winner("East Play-In Match 1");
+    other_winner = get_matchup_winner("East Play-In Match 2");
+  } else if (conference_name == "west") {
+    winner = get_matchup_winner("West Play-In Match 1");
+    other_winner = get_matchup_winner("West Play-In Match 2");
+  }
+  const seed_7 = await get_team_by_seed(conference_name, 7);
+  const seed_8 = await get_team_by_seed(conference_name, 8);
+  if (winner.abbr == seed_7.abbr) {
+    enqueue_matchup(new_id, seed_8, other_winner, true);
+  } else {
+    enqueue_matchup(new_id, seed_7, other_winner, true);
+  }
+}
+
+async function queue_round_1(conference_name) {
+  const seed_1 = await get_team_by_seed(conference_name, 1);
+  const seed_2 = await get_team_by_seed(conference_name, 2);
+  const seed_3 = await get_team_by_seed(conference_name, 3);
+  const seed_4 = await get_team_by_seed(conference_name, 4);
+  const seed_5 = await get_team_by_seed(conference_name, 5);
+  const seed_6 = await get_team_by_seed(conference_name, 6);
+
+  let name_starter = null;
+  let seed_7 = null;
+  let seed_8 = null;
+  if (conference_name == "east") {
+    name_starter = "East Round 1";
+    seed_7 = get_matchup_winner("East Play-In Match 1");
+    seed_8 = get_matchup_winner("East Play-In Match 3");
+  } else if (conference_name == "west") {
+    name_starter = "West Round 1";
+    seed_7 = get_matchup_winner("West Play-In Match 1");
+    seed_8 = get_matchup_winner("West Play-In Match 3");
+  } else {
+    return;
+  }
+
+  enqueue_matchup(`${name_starter} Match 1`, seed_1, seed_8, false);
+  enqueue_matchup(`${name_starter} Match 2`, seed_2, seed_7, false);
+  enqueue_matchup(`${name_starter} Match 3`, seed_3, seed_6, false);
+  enqueue_matchup(`${name_starter} Match 4`, seed_4, seed_5, false);
+}
+
+function queue_round_2(conference_name) {
+  let name_starter = "";
+  if (conference_name == "east") {
+    name_starter = "East";
+  } else if (conference_name == "west") {
+    name_starter = "West";
+  } else {
+    return;
+  }
+
+  const team_1 = get_matchup_winner(`${name_starter} Round 1 Match 1`);
+  const team_2 = get_matchup_winner(`${name_starter} Round 1 Match 2`);
+  const team_3 = get_matchup_winner(`${name_starter} Round 1 Match 3`);
+  const team_4 = get_matchup_winner(`${name_starter} Round 1 Match 4`);
+
+  enqueue_matchup(`${name_starter} Round 2 Match 1`, team_1, team_4, false);
+  enqueue_matchup(`${name_starter} Round 2 Match 2`, team_2, team_3, false);
+}
+
+function queue_round_3(conference_name) {
+  let name_starter = "";
+  if (conference_name == "east") {
+    name_starter = "East";
+  } else if (conference_name == "west") {
+    name_starter = "West";
+  } else {
+    return;
+  }
+
+  const team_1 = get_matchup_winner(`${name_starter} Round 2 Match 1`);
+  const team_2 = get_matchup_winner(`${name_starter} Round 2 Match 2`);
+
+  enqueue_matchup(`${name_starter} Conference Finals`, team_1, team_2, false);
+}
+
+function queue_finals() {
+  const west_team = get_matchup_winner("West Conference Finals");
+  const east_team = get_matchup_winner("East Conference Finals");
+  enqueue_matchup('Finals', west_team, east_team, false);
+}
+
 // --- FINAL SCREEN -----------------------------
 
 const bracket_display = document.getElementById("bracket-result");
@@ -227,102 +323,6 @@ let finished_r1 = false;
 let finished_r2 = false;
 let finished_r3 = false;
 let finished_f = false;
-
-async function queue_next_play_in(conference_name) {
-  let winner = null;
-  let other_winner = null;
-  let new_id = null;
-  if (conference_name == "east") {
-    new_id = "East Play-In Match 3";
-  } else if (conference_name == "west") {
-    new_id = "West Play-In Match 3";
-  }
-
-  if (conference_name == "east") {
-    winner = get_matchup_winner("East Play-In Match 1");
-    other_winner = get_matchup_winner("East Play-In Match 2");
-  } else if (conference_name == "west") {
-    winner = get_matchup_winner("West Play-In Match 1");
-    other_winner = get_matchup_winner("West Play-In Match 2");
-  }
-  const seed_7 = await get_team_by_seed(conference_name, 7);
-  const seed_8 = await get_team_by_seed(conference_name, 8);
-  if (winner.abbr == seed_7.abbr) {
-    enqueue_matchup(new_id, seed_8, other_winner, true);
-  } else {
-    enqueue_matchup(new_id, seed_7, other_winner, true);
-  }
-}
-
-async function queue_round_1(conference_name) {
-  const seed_1 = await get_team_by_seed(conference_name, 1);
-  const seed_2 = await get_team_by_seed(conference_name, 2);
-  const seed_3 = await get_team_by_seed(conference_name, 3);
-  const seed_4 = await get_team_by_seed(conference_name, 4);
-  const seed_5 = await get_team_by_seed(conference_name, 5);
-  const seed_6 = await get_team_by_seed(conference_name, 6);
-
-  let name_starter = null;
-  let seed_7 = null;
-  let seed_8 = null;
-  if (conference_name == "east") {
-    name_starter = "East Round 1";
-    seed_7 = get_matchup_winner("East Play-In Match 1");
-    seed_8 = get_matchup_winner("East Play-In Match 3");
-  } else if (conference_name == "west") {
-    name_starter = "West Round 1";
-    seed_7 = get_matchup_winner("West Play-In Match 1");
-    seed_8 = get_matchup_winner("West Play-In Match 3");
-  } else {
-    return;
-  }
-
-  enqueue_matchup(`${name_starter} Match 1`, seed_1, seed_8, false);
-  enqueue_matchup(`${name_starter} Match 2`, seed_2, seed_7, false);
-  enqueue_matchup(`${name_starter} Match 3`, seed_3, seed_6, false);
-  enqueue_matchup(`${name_starter} Match 4`, seed_4, seed_5, false);
-}
-
-function queue_round_2(conference_name) {
-  let name_starter = "";
-  if (conference_name == "east") {
-    name_starter = "East";
-  } else if (conference_name == "west") {
-    name_starter = "West";
-  } else {
-    return;
-  }
-
-  const team_1 = get_matchup_winner(`${name_starter} Round 1 Match 1`);
-  const team_2 = get_matchup_winner(`${name_starter} Round 1 Match 2`);
-  const team_3 = get_matchup_winner(`${name_starter} Round 1 Match 3`);
-  const team_4 = get_matchup_winner(`${name_starter} Round 1 Match 4`);
-
-  enqueue_matchup(`${name_starter} Round 2 Match 1`, team_1, team_4, false);
-  enqueue_matchup(`${name_starter} Round 2 Match 2`, team_2, team_3, false);
-}
-
-function queue_round_3(conference_name) {
-  let name_starter = "";
-  if (conference_name == "east") {
-    name_starter = "East";
-  } else if (conference_name == "west") {
-    name_starter = "West";
-  } else {
-    return;
-  }
-
-  const team_1 = get_matchup_winner(`${name_starter} Round 2 Match 1`);
-  const team_2 = get_matchup_winner(`${name_starter} Round 2 Match 2`);
-
-  enqueue_matchup(`${name_starter} Conference Finals`, team_1, team_2, false);
-}
-
-function queue_finals() {
-  const west_team = get_matchup_winner("West Conference Finals");
-  const east_team = get_matchup_winner("East Conference Finals");
-  enqueue_matchup('Finals', west_team, east_team, false);
-}
 
 function display_next_matchup() {
   const new_matchup = pop_matchup();
