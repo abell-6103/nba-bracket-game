@@ -16,6 +16,14 @@
 		"East Play-In Match 2": {
 			"winner": "CHA",
 			"games": -1
+		},
+		"West Play-In Match 3": {
+			"winner": "PHX",
+			"games": -1
+		},
+		"East Play-In Match 3": {
+			"winner": "ORL",
+			"games": -1
 		}
 	},
 	"standings": {
