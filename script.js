@@ -7,17 +7,22 @@ const FINAL_SCREEN_NAME = "final-screen";
 const REVIEW_INPUT_SCREEN_NAME = "review-input-screen";
 const REVIEW_SCREEN_NAME = "review-screen";
 
+const SCREEN_CLASS_NAME = "screen"
+const ACTIVE_CLASS_NAME = "active"
+
 function set_screen(screen_name) {
-  document.querySelectorAll(".screen").forEach(screen => {
-    screen.classList.remove("active");
+  document.querySelectorAll(`.${SCREEN_CLASS_NAME}`).forEach(screen => {
+    screen.classList.remove(ACTIVE_CLASS_NAME);
   })
-  document.getElementById(screen_name).classList.add("active");
+  document.getElementById(screen_name).classList.add(ACTIVE_CLASS_NAME);
 }
 
 // --- DATA HANDLING ----------------------------
 
+const DATA_SRC = "data.json";
+
 function get_data() {
-  return fetch("data.json").then(res => {
+  return fetch(DATA_SRC).then(res => {
     return res.json().then(data => {
       return data;
     }).catch(error => {
@@ -38,14 +43,17 @@ async function get_outcomes() {
 
 // --- REGULAR SEASON GET METHODS ---------------
 
+const EAST_KEY = "east";
+const WEST_KEY = "west";
+
 async function get_team_by_abbr(abbr) {
   const standings = await get_standings();
-  for (const team of standings["east"]) {
+  for (const team of standings[EAST_KEY]) {
     if (team.abbr == abbr) {
       return team;
     }
   }
-  for (const team of standings["west"]) {
+  for (const team of standings[WEST_KEY]) {
     if (team.abbr == abbr) {
       return team;
     }
@@ -86,12 +94,17 @@ function set_matchup_winner(matchup_id, team, games) {
 
 let queue = [];
 
+const ID_KEY = "id";
+const TEAM_1_KEY = "team_1";
+const TEAM_2_KEY = "team_2";
+const PLAY_IN_KEY = "play_in";
+
 function enqueue_matchup(id, team_1_obj, team_2_obj, play_in) {
   let matchup = {};
-  matchup['id'] = id;
-  matchup['team_1'] = team_1_obj;
-  matchup['team_2'] = team_2_obj;
-  matchup['play_in'] = play_in;
+  matchup[ID_KEY] = id;
+  matchup[TEAM_1_KEY] = team_1_obj;
+  matchup[TEAM_2_KEY] = team_2_obj;
+  matchup[PLAY_IN_KEY] = play_in;
   queue.push(matchup);
 }
 
@@ -99,18 +112,21 @@ function pop_matchup() {
   return queue.shift();
 }
 
+const EAST_PI_HEAD = "East Play-In Match";
+const WEST_PI_HEAD = "West Play-In Match";
+
 async function queue_play_in(conference_name) {
   const seed_7 = await get_team_by_seed(conference_name, 7);
   const seed_8 = await get_team_by_seed(conference_name, 8);
   const seed_9 = await get_team_by_seed(conference_name, 9);
   const seed_10 = await get_team_by_seed(conference_name, 10);
 
-  if (conference_name === "east") {
-    enqueue_matchup("East Play-In Match 1", seed_7, seed_8, true);
-    enqueue_matchup("East Play-In Match 2", seed_9, seed_10, true);
-  } else if (conference_name === "west") {
-    enqueue_matchup("West Play-In Match 1", seed_7, seed_8, true);
-    enqueue_matchup("West Play-In Match 2", seed_9, seed_10, true);
+  if (conference_name === EAST_KEY) {
+    enqueue_matchup(`${EAST_PI_HEAD} 1`, seed_7, seed_8, true);
+    enqueue_matchup(`${EAST_PI_HEAD} 2`, seed_9, seed_10, true);
+  } else if (conference_name === WEST_KEY) {
+    enqueue_matchup(`${WEST_PI_HEAD} 1`, seed_7, seed_8, true);
+    enqueue_matchup(`${WEST_PI_HEAD} 2`, seed_9, seed_10, true);
   }
 }
 
@@ -118,18 +134,18 @@ async function queue_next_play_in(conference_name) {
   let winner = null;
   let other_winner = null;
   let new_id = null;
-  if (conference_name == "east") {
-    new_id = "East Play-In Match 3";
-  } else if (conference_name == "west") {
-    new_id = "West Play-In Match 3";
+  if (conference_name == EAST_KEY) {
+    new_id = `${EAST_PI_HEAD} 3`;
+  } else if (conference_name == WEST_KEY) {
+    new_id = `${WEST_PI_HEAD} 3`;
   }
 
-  if (conference_name == "east") {
-    winner = get_matchup_winner("East Play-In Match 1");
-    other_winner = get_matchup_winner("East Play-In Match 2");
-  } else if (conference_name == "west") {
-    winner = get_matchup_winner("West Play-In Match 1");
-    other_winner = get_matchup_winner("West Play-In Match 2");
+  if (conference_name == EAST_KEY) {
+    winner = get_matchup_winner(`${EAST_PI_HEAD} 1`);
+    other_winner = get_matchup_winner(`${EAST_PI_HEAD} 2`);
+  } else if (conference_name == WEST_KEY) {
+    winner = get_matchup_winner(`${WEST_PI_HEAD} 1`);
+    other_winner = get_matchup_winner(`${WEST_PI_HEAD} 2`);
   }
   const seed_7 = await get_team_by_seed(conference_name, 7);
   const seed_8 = await get_team_by_seed(conference_name, 8);
@@ -151,14 +167,14 @@ async function queue_round_1(conference_name) {
   let name_starter = null;
   let seed_7 = null;
   let seed_8 = null;
-  if (conference_name == "east") {
+  if (conference_name == EAST_KEY) {
     name_starter = "East Round 1";
-    seed_7 = get_matchup_winner("East Play-In Match 1");
-    seed_8 = get_matchup_winner("East Play-In Match 3");
-  } else if (conference_name == "west") {
+    seed_7 = get_matchup_winner(`${EAST_PI_HEAD} 1`);
+    seed_8 = get_matchup_winner(`${EAST_PI_HEAD} 3`);
+  } else if (conference_name == WEST_KEY) {
     name_starter = "West Round 1";
-    seed_7 = get_matchup_winner("West Play-In Match 1");
-    seed_8 = get_matchup_winner("West Play-In Match 3");
+    seed_7 = get_matchup_winner(`${WEST_PI_HEAD} 1`);
+    seed_8 = get_matchup_winner(`${WEST_PI_HEAD} 3`);
   } else {
     return;
   }
@@ -171,9 +187,9 @@ async function queue_round_1(conference_name) {
 
 function queue_round_2(conference_name) {
   let name_starter = "";
-  if (conference_name == "east") {
+  if (conference_name == EAST_KEY) {
     name_starter = "East";
-  } else if (conference_name == "west") {
+  } else if (conference_name == WEST_KEY) {
     name_starter = "West";
   } else {
     return;
@@ -190,9 +206,9 @@ function queue_round_2(conference_name) {
 
 function queue_round_3(conference_name) {
   let name_starter = "";
-  if (conference_name == "east") {
+  if (conference_name == EAST_KEY) {
     name_starter = "East";
-  } else if (conference_name == "west") {
+  } else if (conference_name == WEST_KEY) {
     name_starter = "West";
   } else {
     return;
@@ -254,9 +270,11 @@ let play_in_match = false;
 const team_1_box = document.getElementById("team-1");
 const team_2_box = document.getElementById("team-2");
 
+const SELECTED_CLASS_NAME = "selected";
+
 function clear_team_selection() {
-  team_1_box.classList.remove("selected");
-  team_2_box.classList.remove("selected");
+  team_1_box.classList.remove(SELECTED_CLASS_NAME);
+  team_2_box.classList.remove(SELECTED_CLASS_NAME);
   selection_made = false;
   selection = null;
 }
@@ -266,7 +284,7 @@ const games_input = document.getElementById("games-input");
 
 team_1_box.addEventListener("click", () => {
   clear_team_selection();
-  team_1_box.classList.add("selected");
+  team_1_box.classList.add(SELECTED_CLASS_NAME);
   selection_made = true;
   selection = team_1;
   if (!play_in_match) {
@@ -277,7 +295,7 @@ team_1_box.addEventListener("click", () => {
 
 team_2_box.addEventListener("click", () => {
   clear_team_selection();
-  team_2_box.classList.add("selected");
+  team_2_box.classList.add(SELECTED_CLASS_NAME);
   selection_made = true;
   selection = team_2;
   if (!play_in_match) {
@@ -287,6 +305,10 @@ team_2_box.addEventListener("click", () => {
 });
 
 const match_title = document.getElementById("predict-screen").querySelector(".title");
+
+const TEAM_NAME_CLASS_NAME = "team-name";
+const TEAM_LOGO_CLASS_NAME = "team-logo";
+const TEAM_RECORD_CLASS_NAME = "team-record";
 
 function display_matchup(title, team_1_obj, team_2_obj, play_in) {
   match_title.innerHTML = title;
@@ -301,13 +323,13 @@ function display_matchup(title, team_1_obj, team_2_obj, play_in) {
   team_1 = team_1_obj;
   team_2 = team_2_obj;
 
-  team_1_box.querySelector(".team-name").innerHTML = team_1_obj.name;
-  team_1_box.querySelector(".team-logo").src = team_1_obj.logo;
-  team_1_box.querySelector(".team-record").innerHTML = team_1_obj.record;
+  team_1_box.querySelector(`.${TEAM_NAME_CLASS_NAME}`).innerHTML = team_1_obj.name;
+  team_1_box.querySelector(`.${TEAM_LOGO_CLASS_NAME}`).src = team_1_obj.logo;
+  team_1_box.querySelector(`.${TEAM_RECORD_CLASS_NAME}`).innerHTML = team_1_obj.record;
 
-  team_2_box.querySelector(".team-name").innerHTML = team_2_obj.name;
-  team_2_box.querySelector(".team-logo").src = team_2_obj.logo;
-  team_2_box.querySelector(".team-record").innerHTML = team_2_obj.record;
+  team_2_box.querySelector(`.${TEAM_NAME_CLASS_NAME}`).innerHTML = team_2_obj.name;
+  team_2_box.querySelector(`.${TEAM_LOGO_CLASS_NAME}`).src = team_2_obj.logo;
+  team_2_box.querySelector(`.${TEAM_RECORD_CLASS_NAME}`).innerHTML = team_2_obj.record;
 }
 
 const games_slider = document.getElementById("games-slider");
@@ -326,7 +348,7 @@ let finished_f = false;
 
 function display_next_matchup() {
   const new_matchup = pop_matchup();
-  display_matchup(new_matchup['id'], new_matchup['team_1'], new_matchup['team_2'], new_matchup['play_in']);
+  display_matchup(new_matchup[ID_KEY], new_matchup[TEAM_1_KEY], new_matchup[TEAM_2_KEY], new_matchup[PLAY_IN_KEY]);
 }
 
 matchup_button.onclick = async function() {
@@ -335,25 +357,25 @@ matchup_button.onclick = async function() {
     display_next_matchup();
   } else {
     if (!finished_play_in) {
-      await queue_next_play_in("west");
-      await queue_next_play_in("east");
+      await queue_next_play_in(WEST_KEY);
+      await queue_next_play_in(EAST_KEY);
       finished_play_in = true;
       display_next_matchup();
     } else if (!finished_r1) {
       games = games_slider.value;
       games_text.innerHTML = String(games) + " Games";
-      await queue_round_1("west");
-      await queue_round_1("east");
+      await queue_round_1(WEST_KEY);
+      await queue_round_1(EAST_KEY);
       finished_r1 = true;
       display_next_matchup();
     } else if (!finished_r2) {
-      queue_round_2("west");
-      queue_round_2("east");
+      queue_round_2(WEST_KEY);
+      queue_round_2(EAST_KEY);
       finished_r2 = true;
       display_next_matchup();
     } else if (!finished_r3) {
-      queue_round_3("west");
-      queue_round_3("east");
+      queue_round_3(WEST_KEY);
+      queue_round_3(EAST_KEY);
       finished_r3 = true;
       display_next_matchup();
     } else if (!finished_f) {
@@ -435,16 +457,20 @@ function set_score(score) {
 
 const bracket_list = document.getElementById("bracket-list");
 
+const LIST_ITEM_CLASS_NAME = "list-item";
+const LIST_TITLE_CLASS_NAME = "list-title";
+const LIST_VALUE_CLASS_NAME = "list-value";
+
 function add_bracket_item(title, value) {
   const item_div = document.createElement("div");
-  item_div.classList.add("list-item");
+  item_div.classList.add(LIST_ITEM_CLASS_NAME);
 
   const title_div = document.createElement("div");
-  title_div.classList.add("list-title");
+  title_div.classList.add(LIST_TITLE_CLASS_NAME);
   title_div.innerHTML = title;
   
   const value_div = document.createElement("div");
-  value_div.classList.add("list-value");
+  value_div.classList.add(LIST_VALUE_CLASS_NAME);
   value_div.innerHTML = value;
 
   item_div.appendChild(title_div);
@@ -456,6 +482,10 @@ function add_bracket_item(title, value) {
 function clear_bracket_items() {
   bracket_list.innerHTML = "";
 }
+
+const PLUS_TWO_STRING = "+2";
+const PLUS_ONE_STRING = "+1";
+const PLUS_ZERO_STRING = "-";
 
 async function display_review() {
   let score = 0;
@@ -477,25 +507,27 @@ async function display_review() {
         pick_string += ` in ${bracket_games[id]}`
       }
 
+      const res_string = `${base_string} (${pick_string})`
+
       if (winner == bracket_winners[id]) {
         if (games != -1) {
           if (games == bracket_games[id]) {
-            add_bracket_item(`✅✅ ${base_string} (${pick_string})`, "+2");
+            add_bracket_item(`✅✅ ${res_string}`, PLUS_TWO_STRING);
             score += 2;
           } else {
-            add_bracket_item(` ✅ ${base_string} (${pick_string})`, "+1");
+            add_bracket_item(` ✅ ${res_string}`, PLUS_ONE_STRING);
             score += 1;
           }
         } else {
-          add_bracket_item(` ✅ ${base_string} (${pick_string})`, "+1");
+          add_bracket_item(` ✅ ${res_string}`, PLUS_ONE_STRING);
           score += 1;
         }
       } else {
-        add_bracket_item(` ❌ ${base_string} (${pick_string})`, "-");
+        add_bracket_item(` ❌ ${res_string}`, PLUS_ZERO_STRING);
       }
     } else {
       // No prediction made
-      add_bracket_item(` ❌ ${base_string} (No pick made)`, "-");
+      add_bracket_item(` ❌ ${base_string} (No pick made)`, PLUS_ZERO_STRING);
     }
   }
 
@@ -532,11 +564,11 @@ async function launch() {
     delete matchup_games[id];
   }
 
-  await queue_play_in("west");
-  await queue_play_in("east");
+  await queue_play_in(WEST_KEY);
+  await queue_play_in(EAST_KEY);
 
   const first_match = pop_matchup();
-  display_matchup(first_match['id'], first_match['team_1'], first_match['team_2'], first_match['play_in']);
+  display_matchup(first_match[ID_KEY], first_match[TEAM_1_KEY], first_match[TEAM_2_KEY], first_match[PLAY_IN_KEY]);
 
   set_screen(PREDICT_SCREEN_NAME);
 }
