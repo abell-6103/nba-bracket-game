@@ -14,7 +14,7 @@ function set_screen(screen_name) {
   document.querySelectorAll(`.${SCREEN_CLASS_NAME}`).forEach(screen => {
     screen.classList.remove(ACTIVE_CLASS_NAME);
   });
-  
+
   const target_screen = document.getElementById(screen_name);
   if (target_screen) {
     target_screen.classList.add(ACTIVE_CLASS_NAME);
@@ -167,33 +167,41 @@ async function queue_next_play_in(conference_name) {
   }
 }
 
-async function queue_round_1(conference_name) {
-  const seed_1 = await get_team_by_seed(conference_name, 1);
-  const seed_2 = await get_team_by_seed(conference_name, 2);
-  const seed_3 = await get_team_by_seed(conference_name, 3);
-  const seed_4 = await get_team_by_seed(conference_name, 4);
-  const seed_5 = await get_team_by_seed(conference_name, 5);
-  const seed_6 = await get_team_by_seed(conference_name, 6);
+async function get_initial_seeding(conference_name) {
+  let seeds = [];
+  for (let i = 1; i <= 6; i++) {
+    seeds[i] = await get_team_by_seed(conference_name, i);
+  }
 
-  let name_starter = null;
-  let seed_7 = null;
-  let seed_8 = null;
+  let PI_HEAD = "";
+  if (conference_name == EAST_KEY) {
+    PI_HEAD = EAST_PI_HEAD;
+  } else if (conference_name == WEST_KEY) {
+    PI_HEAD = WEST_PI_HEAD;
+  } else {
+    return;
+  }
+  seeds[7] = get_matchup_winner(`${PI_HEAD} 1`);
+  seeds[8] = get_matchup_winner(`${PI_HEAD} 3`);
+
+  return seeds;
+}
+
+async function queue_round_1(conference_name) {
+  let name_starter = "";
   if (conference_name == EAST_KEY) {
     name_starter = "East Round 1";
-    seed_7 = get_matchup_winner(`${EAST_PI_HEAD} 1`);
-    seed_8 = get_matchup_winner(`${EAST_PI_HEAD} 3`);
   } else if (conference_name == WEST_KEY) {
-    name_starter = "West Round 1";
-    seed_7 = get_matchup_winner(`${WEST_PI_HEAD} 1`);
-    seed_8 = get_matchup_winner(`${WEST_PI_HEAD} 3`);
+    name_starter = "West Round 1"
   } else {
     return;
   }
 
-  enqueue_matchup(`${name_starter} Match 1`, seed_1, seed_8, false);
-  enqueue_matchup(`${name_starter} Match 2`, seed_2, seed_7, false);
-  enqueue_matchup(`${name_starter} Match 3`, seed_3, seed_6, false);
-  enqueue_matchup(`${name_starter} Match 4`, seed_4, seed_5, false);
+  seeds = await get_initial_seeding(conference_name);
+  enqueue_matchup(`${name_starter} Match 1`, seeds[1], seeds[8], false);
+  enqueue_matchup(`${name_starter} Match 2`, seeds[2], seeds[7], false);
+  enqueue_matchup(`${name_starter} Match 3`, seeds[3], seeds[6], false);
+  enqueue_matchup(`${name_starter} Match 4`, seeds[4], seeds[5], false);
 }
 
 function queue_round_2(conference_name) {
