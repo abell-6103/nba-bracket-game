@@ -13,8 +13,12 @@ const ACTIVE_CLASS_NAME = "active"
 function set_screen(screen_name) {
   document.querySelectorAll(`.${SCREEN_CLASS_NAME}`).forEach(screen => {
     screen.classList.remove(ACTIVE_CLASS_NAME);
-  })
-  document.getElementById(screen_name).classList.add(ACTIVE_CLASS_NAME);
+  });
+  
+  const target_screen = document.getElementById(screen_name);
+  if (target_screen) {
+    target_screen.classList.add(ACTIVE_CLASS_NAME);
+  }
 }
 
 // --- DATA HANDLING ----------------------------
@@ -236,8 +240,10 @@ function queue_finals() {
 // --- FINAL SCREEN -----------------------------
 
 const bracket_display = document.getElementById("bracket-result");
-let copypaste = "";
+const bracket_copy_button = document.getElementById("copy-button");
+const bracket_return_button = document.getElementById("return-button");
 
+let copypaste = "";
 function display_bracket() {
   bracket_display.innerHTML = "";
   copypaste = "";
@@ -254,10 +260,10 @@ function display_bracket() {
   }
 }
 
-document.getElementById("copy-button").onclick = function() {
+bracket_copy_button.onclick = function() {
   navigator.clipboard.writeText(copypaste);
 };
-document.getElementById("return-button").onclick = function() {
+bracket_return_button.onclick = function() {
   set_screen(LAUNCH_SCREEN_NAME);
 };
 
