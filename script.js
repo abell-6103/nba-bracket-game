@@ -90,6 +90,13 @@ function set_matchup_winner(matchup_id, team, games) {
   matchup_games[matchup_id] = games;
 }
 
+function clear_matchups() {
+  for (const id in matchup_winners) {
+    delete matchup_winners[id];
+    delete matchup_games[id];
+  }
+}
+
 // --- PREDICTION QUEUE -------------------------
 
 let queue = [];
@@ -559,10 +566,7 @@ review_redo_button.onclick = function() {
 // --- LAUNCH SCREEN ----------------------------
 
 async function launch() {
-  for (const id in matchup_winners) {
-    delete matchup_winners[id];
-    delete matchup_games[id];
-  }
+  clear_matchups();
 
   await queue_play_in(WEST_KEY);
   await queue_play_in(EAST_KEY);
