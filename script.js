@@ -508,50 +508,69 @@ const PLUS_TWO_STRING = "+2";
 const PLUS_ONE_STRING = "+1";
 const PLUS_ZERO_STRING = "-";
 
+function get_bracket_res_string(id, result, pick) {
+  let res_string = "";
+  if (result.games == -1) {
+    res_string = `${id}: ${result.winner} `;
+  } else {
+    res_string = `${id}: ${result.winner} in ${result.games} `;
+  }
+
+  if (pick) {
+    if (result.games != -1) {
+      res_string += `(Your pick: ${pick.winner} in ${pick.games})`;
+    } else {
+      res_string += `(Your pick: ${pick.winner})`;
+    }
+  } else {
+    res_string += "(No pick made)";
+  }
+  return res_string;
+}
+
+function append_bracket_result(score, pick, result, res_string) {
+  // Adds a bracket item to the result display. Returns new score.
+  if (pick.winner == result.winner) {
+    if (pick.games != -1) {
+      if (pick.games == result.games) {
+        add_bracket_item(`✅✅ ${res_string}`, PLUS_TWO_STRING);
+        return score + 2;
+      } else {
+        add_bracket_item(` ✅ ${res_string}`, PLUS_ONE_STRING);
+        return score + 1;
+      }
+    } else {
+      add_bracket_item(` ✅ ${res_string}`, PLUS_ONE_STRING);
+      return score + 1;
+    }
+  } else {
+    add_bracket_item(` ❌ ${res_string}`, PLUS_ZERO_STRING);
+    return score;
+  }
+}
+
 async function display_review() {
   let score = 0;
   clear_bracket_items();
 
   const outcomes = await get_outcomes();
   for (const id of Object.keys(outcomes)) {
-    const winner = outcomes[id].winner;
-    const games = outcomes[id].games;
-
-    let base_string = `${id}: ${winner}`
-    if (games != -1) {
-      base_string += ` in ${games}`
-    }
+    let result = {};
+    result.winner = outcomes[id].winner;
+    result.games = outcomes[id].games;
 
     if (bracket_winners[id]) {
-      let pick_string = `Your pick: ${bracket_winners[id]}`;
-      if (games != -1) {
-        pick_string += ` in ${bracket_games[id]}`
-      }
+      let pick = {};
+      pick.winner = bracket_winners[id];
+      pick.games = bracket_games[id];
 
-      const res_string = `${base_string} (${pick_string})`
-
-      if (winner == bracket_winners[id]) {
-        if (games != -1) {
-          if (games == bracket_games[id]) {
-            add_bracket_item(`✅✅ ${res_string}`, PLUS_TWO_STRING);
-            score += 2;
-          } else {
-            add_bracket_item(` ✅ ${res_string}`, PLUS_ONE_STRING);
-            score += 1;
-          }
-        } else {
-          add_bracket_item(` ✅ ${res_string}`, PLUS_ONE_STRING);
-          score += 1;
-        }
-      } else {
-        add_bracket_item(` ❌ ${res_string}`, PLUS_ZERO_STRING);
-      }
+      const res_string = get_bracket_res_string(id, result, pick);
+      score = append_bracket_result(score, pick, result, res_string);
     } else {
-      // No prediction made
-      add_bracket_item(` ❌ ${base_string} (No pick made)`, PLUS_ZERO_STRING);
+      const res_string = get_bracket_res_string(id, result);
+      add_bracket_item(` ❌ ${res_string}`, PLUS_ZERO_STRING);
     }
   }
-
   set_score(score);
 }
 
