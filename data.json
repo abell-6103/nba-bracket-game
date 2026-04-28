@@ -24,6 +24,10 @@
 		"East Play-In Match 3": {
 			"winner": "ORL",
 			"games": -1
+		},
+		"West Round 1 Match 1": {
+			"winner": "OKC",
+			"games": 4
 		}
 	},
 	"standings": {
