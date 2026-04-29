@@ -28,6 +28,10 @@
 		"West Round 1 Match 1": {
 			"winner": "OKC",
 			"games": 4
+		},
+		"West Round 1 Match 2": {
+			"winner": "SAS",
+			"games": 5
 		}
 	},
 	"standings": {
